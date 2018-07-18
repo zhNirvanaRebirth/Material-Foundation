@@ -2,9 +2,11 @@ package com.zhwilson.environment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.RelativeLayout;
 
 import com.zhwilson.environment.view.ShapeChangeView;
 
@@ -19,30 +21,91 @@ public class ShapeChangeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shape_change);
         shapeChangeView = findViewById(R.id.shape_change);
-        shapeChangeView.setShape(ShapeChangeView.Shape.CIRCLE);
+//        shapeChangeView.setClipToOutline(true);
         float quadLength = (float) (ShapeChangeView.REDIUS * Math.tan(Math.PI / 6));
-        float octagonInc = (float) (ShapeChangeView.REDIUS / Math.cos(Math.PI / 6) - ShapeChangeView.REDIUS);
-        Log.e("zhwilson", quadLength + "_" + octagonInc);
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(shapeChangeView, "quadLength", 0, quadLength);
-        objectAnimator.setDuration(2000);
+        float octagonInc = quadLength;
+        float rectInc = ShapeChangeView.REDIUS - quadLength;
 
-//        final ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(shapeChangeView, "octagonInc", 0, octagonInc);
-        octagonInc = 200;
-        final ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(shapeChangeView, "quadLength", quadLength, octagonInc);
-        objectAnimator2.setDuration(2000);
-
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
+        ObjectAnimator originAnimator = ObjectAnimator.ofFloat(shapeChangeView, "rectInc", 0, ShapeChangeView.REDIUS);
+        originAnimator.setInterpolator(new DecelerateInterpolator());
+        originAnimator.setDuration(300);
+        originAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-//                shapeChangeView.setShape(ShapeChangeView.Shape.OCTAGON);
-//                shapeChangeView.setOctagonInc(0);
-                objectAnimator2.setStartDelay(1000);
-                objectAnimator2.start();
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                shapeChangeView.setShape(ShapeChangeView.Shape.RECT);
             }
         });
 
-        objectAnimator.setStartDelay(2000);
-        objectAnimator.start();
+        ObjectAnimator circleAnimator = ObjectAnimator.ofFloat(shapeChangeView, "quadLength", 0, quadLength);
+        circleAnimator.setInterpolator(new DecelerateInterpolator());
+        circleAnimator.setDuration(300);
+        circleAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                shapeChangeView.setShape(ShapeChangeView.Shape.CIRCLE);
+            }
+        });
+
+        ObjectAnimator octagonAnimator = ObjectAnimator.ofFloat(shapeChangeView, "octagonInc", 0, octagonInc);
+        octagonAnimator.setInterpolator(new DecelerateInterpolator());
+        octagonAnimator.setDuration(200);
+        octagonAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                shapeChangeView.setShape(ShapeChangeView.Shape.OCTAGON);
+            }
+        });
+
+        ObjectAnimator rectAnimator = ObjectAnimator.ofFloat(shapeChangeView, "rectInc", 0, rectInc);
+        rectAnimator.setInterpolator(new DecelerateInterpolator());
+        rectAnimator.setDuration(200);
+        rectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                shapeChangeView.setShape(ShapeChangeView.Shape.BIGRECT);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                shapeChangeView.setShape(ShapeChangeView.Shape.RECT);
+            }
+        });
+
+        final AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(originAnimator);
+        animatorSet.play(circleAnimator).after(1000).after(originAnimator);
+        animatorSet.play(octagonAnimator).after(2000).after(circleAnimator);
+        animatorSet.play(rectAnimator).after(3000).after(octagonAnimator);
+        animatorSet.setStartDelay(2000);
+//        animatorSet.start();
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                animatorSet.start();
+            }
+        });
+
+        //TODO 问题：这里这样写，动画执行过程中，ShapeChangeView的onDraw并没有重新执行，至少没有打印信息，这是为什么？
+        ObjectAnimator scaleAnimator = ObjectAnimator.ofFloat(shapeChangeView, "scaleX", 1, 0.1f);
+        scaleAnimator.setInterpolator(new DecelerateInterpolator());
+        scaleAnimator.setDuration(3000);
+        scaleAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(shapeChangeView.getLayoutParams());
+                layoutParams.width = 300;
+                layoutParams.height = 300;
+                shapeChangeView.setLayoutParams(layoutParams);
+            }
+        });
+//        scaleAnimator.start();
+
     }
 }
