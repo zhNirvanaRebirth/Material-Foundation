@@ -72,6 +72,7 @@ public class ShapeChangeActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                shapeChangeView.setRectInc(0);
                 shapeChangeView.setShape(ShapeChangeView.Shape.RECT);
             }
         });
@@ -82,7 +83,7 @@ public class ShapeChangeActivity extends AppCompatActivity {
         animatorSet.play(octagonAnimator).after(2000).after(circleAnimator);
         animatorSet.play(rectAnimator).after(3000).after(octagonAnimator);
         animatorSet.setStartDelay(2000);
-//        animatorSet.start();
+        animatorSet.start();
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
