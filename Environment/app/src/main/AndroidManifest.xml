@@ -18,6 +18,8 @@
         </activity>
         <activity android:name=".EnterAndExitActivity"/>
         <activity android:name=".ShapeChangeActivity"/>
+        <activity android:name=".RevealEffectActivity"/>
+        <activity android:name=".CardFlipActivity"/>
     </application>
 
 </manifest>

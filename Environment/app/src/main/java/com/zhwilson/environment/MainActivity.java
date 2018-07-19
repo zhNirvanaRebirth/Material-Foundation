@@ -19,6 +19,8 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView enterExit;
     private TextView shapeChange;
+    private TextView revealEffect;
+    private TextView cardFlip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         shapeChange = findViewById(R.id.shape_change);
         shapeChange.setOnClickListener(this);
+
+        revealEffect = findViewById(R.id.reveal_effect);
+        revealEffect.setOnClickListener(this);
+
+
+        cardFlip = findViewById(R.id.card_flip);
+        cardFlip.setOnClickListener(this);
     }
 
 
@@ -40,6 +49,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.shape_change:
                 intent = new Intent(MainActivity.this, ShapeChangeActivity.class);
+                break;
+            case R.id.reveal_effect:
+                intent = new Intent(MainActivity.this, RevealEffectActivity.class);
+                break;
+            case R.id.card_flip:
+                intent = new Intent(MainActivity.this, CardFlipActivity.class);
                 break;
         }
         startActivity(intent);
