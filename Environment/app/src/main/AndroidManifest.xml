@@ -8,6 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -20,6 +21,8 @@
         <activity android:name=".ShapeChangeActivity"/>
         <activity android:name=".RevealEffectActivity"/>
         <activity android:name=".CardFlipActivity"/>
+        <activity android:name=".AnimationDrawableActivity"/>
+        <activity android:name=".ZoomAnimationActivity"/>
     </application>
 
 </manifest>

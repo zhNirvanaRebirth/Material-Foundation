@@ -44,4 +44,24 @@
         android:layout_marginTop="10dp"
         android:text="card_flip"/>
 
+    <TextView
+        android:id="@+id/drawable_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_flip"
+        android:layout_marginTop="10dp"
+        android:text="drawable_animation"/>
+
+    <TextView
+        android:id="@+id/zoom_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/drawable_animation"
+        android:layout_marginTop="10dp"
+        android:text="zoom_animation"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,10 +6,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -21,9 +27,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView shapeChange;
     private TextView revealEffect;
     private TextView cardFlip;
+    private TextView drawableAnimation;
+    private TextView zoomAnimation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setExitTransition(new Slide());
         setContentView(R.layout.activity_main);
         enterExit = findViewById(R.id.enter_and_exit);
         enterExit.setOnClickListener(this);
@@ -34,9 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         revealEffect = findViewById(R.id.reveal_effect);
         revealEffect.setOnClickListener(this);
 
-
         cardFlip = findViewById(R.id.card_flip);
         cardFlip.setOnClickListener(this);
+
+        drawableAnimation = findViewById(R.id.drawable_animation);
+        drawableAnimation.setOnClickListener(this);
+
+        zoomAnimation = findViewById(R.id.zoom_animation);
+        zoomAnimation.setOnClickListener(this);
     }
 
 
@@ -56,7 +72,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.card_flip:
                 intent = new Intent(MainActivity.this, CardFlipActivity.class);
                 break;
+            case R.id.drawable_animation:
+                intent = new Intent(MainActivity.this, AnimationDrawableActivity.class);
+                break;
+            case R.id.zoom_animation:
+                intent = new Intent(MainActivity.this, ZoomAnimationActivity.class);
+                break;
         }
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        else startActivity(intent);
     }
 }
